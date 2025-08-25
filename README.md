@@ -1,7 +1,7 @@
 HiSA-v1812
 ==========
 
-A modified version of the HiSA for OpenFOAM-v1812 and for automatic-differentiation
+A modified version of the HiSA for DAFoam
 
 The source of the HISA solver. 
 See:
