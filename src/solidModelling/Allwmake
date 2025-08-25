@@ -1,0 +1,4 @@
+#! /bin/sh
+
+wmake modal
+wmake modal/getPatchPoints

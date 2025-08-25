@@ -1,0 +1,6 @@
+#! /bin/sh
+
+wmake multiRegionSolver
+
+cd singleRegionSolvers && ./Allwmake && cd ..
+
