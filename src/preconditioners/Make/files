@@ -1,5 +1,5 @@
 preconditioner/preconditioner.C
 lusgs/lusgs.C
 
-LIB = $(FOAM_USER_LIBBIN)/libhisaPreconditioners
+LIB = $(DAFOAM_ROOT_PATH)/OpenFOAM/sharedLibs/libhisaPreconditioners$(WM_CODI_AD_LIB_POSTFIX)
 

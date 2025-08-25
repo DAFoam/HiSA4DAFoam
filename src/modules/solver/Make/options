@@ -3,11 +3,15 @@ ifdef BLUECFDPATH
 endif
 
 EXE_INC = \
+    -std=c++11 \
+    -Wno-old-style-cast \
+    -Wno-conversion-null \
+    -Wno-deprecated-copy \
     $(BLUECFD) \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude
 
 LIB_LIBS = \
-    -lfiniteVolume \
-    -lmeshTools
+    -lfiniteVolume$(WM_CODI_AD_LIB_POSTFIX) \
+    -lmeshTools$(WM_CODI_AD_LIB_POSTFIX)
 

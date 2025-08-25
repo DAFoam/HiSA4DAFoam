@@ -26,6 +26,10 @@ ifeq (OpenFOAM-plus,$(findstring OPENFOAM-plus,$(WM_PROJECT_DIR)))
 endif
 
 EXE_INC = \
+    -std=c++11 \
+    -Wno-old-style-cast \
+    -Wno-conversion-null \
+    -Wno-deprecated-copy \
     $(FOAM_VERSION) \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
@@ -36,7 +40,7 @@ EXE_INC = \
 EXE_LIBS = \
     -lfiniteVolume \
     -lmeshTools \
-    -L$(FOAM_USER_LIBBIN) \
+    -L$(DAFOAM_ROOT_PATH)/OpenFOAM/sharedLibs \
     -lsolverModule \
     -lhisaModule \
     -lhisaSolvers

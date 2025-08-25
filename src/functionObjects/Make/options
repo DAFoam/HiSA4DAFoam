@@ -1,4 +1,8 @@
-EXE_INC = -g \
+EXE_INC = \
+    -std=c++11 \
+    -Wno-old-style-cast \
+    -Wno-conversion-null \
+    -Wno-deprecated-copy \
     -I./lnInclude \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/dynamicMesh/lnInclude \
@@ -8,7 +12,7 @@ EXE_INC = -g \
     -I$(LIB_SRC)/meshTools/lnInclude
 
 LIB_LIBS = \
-    -lOpenFOAM \
-    -lfiniteVolume \
-    -ldynamicMesh \
-    -lmeshTools
+    -lOpenFOAM$(WM_CODI_AD_LIB_POSTFIX) \
+    -lfiniteVolume$(WM_CODI_AD_LIB_POSTFIX) \
+    -ldynamicMesh$(WM_CODI_AD_LIB_POSTFIX) \
+    -lmeshTools$(WM_CODI_AD_LIB_POSTFIX)

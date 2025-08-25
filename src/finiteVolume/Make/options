@@ -29,7 +29,11 @@ ifdef BLUECFDPATH
     BLUECFD = -DBLUECFD
 endif
 
-EXE_INC = -g \
+EXE_INC = \
+    -std=c++11 \
+    -Wno-old-style-cast \
+    -Wno-conversion-null \
+    -Wno-deprecated-copy \
     $(FOAM_VERSION) \
     $(BLUECFD) \
     -I./lnInclude \
@@ -44,13 +48,13 @@ EXE_INC = -g \
     -I$(LIB_SRC)/meshTools/lnInclude
 
 LIB_LIBS = \
-    -lOpenFOAM \
-    -lfiniteVolume \
-    -lmeshTools \
-    -lcompressibleTransportModels \
-    -lcompressibleTurbulenceModels \
-    -lfluidThermophysicalModels \
-    -lspecie \
-    -lcompressibleTurbulenceModels
+    -lOpenFOAM$(WM_CODI_AD_LIB_POSTFIX) \
+    -lfiniteVolume$(WM_CODI_AD_LIB_POSTFIX) \
+    -lmeshTools$(WM_CODI_AD_LIB_POSTFIX) \
+    -lcompressibleTransportModels$(WM_CODI_AD_LIB_POSTFIX) \
+    -lcompressibleTurbulenceModels$(WM_CODI_AD_LIB_POSTFIX) \
+    -lfluidThermophysicalModels$(WM_CODI_AD_LIB_POSTFIX) \
+    -lspecie$(WM_CODI_AD_LIB_POSTFIX) \
+    -lcompressibleTurbulenceModels$(WM_CODI_AD_LIB_POSTFIX)
 
 

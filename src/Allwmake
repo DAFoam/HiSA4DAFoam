@@ -1,8 +1,8 @@
 #! /bin/sh
 
-wmake finiteVolume
-wmake preconditioners
-wmake solvers
-cd solidModelling && { ./Allwmake; cd ..; }
-wmake functionObjects
+wmake -j finiteVolume
+wmake -j preconditioners
+wmake -j solvers
+# cd solidModelling && { ./Allwmake; cd ..; }
+wmake -j functionObjects
 cd modules && { ./Allwmake; cd ..; }

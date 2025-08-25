@@ -2,5 +2,5 @@ pseudotimeControl/pseudotimeControl.C
 hisaModule.C
 hisaModuleTimestepping.C
 
-LIB = $(FOAM_USER_LIBBIN)/libhisaModule
+LIB = $(DAFOAM_ROOT_PATH)/OpenFOAM/sharedLibs/libhisaModule$(WM_CODI_AD_LIB_POSTFIX)
 

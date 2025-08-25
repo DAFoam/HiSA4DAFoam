@@ -1,4 +1,4 @@
 solverModule.C
 
-LIB = $(FOAM_USER_LIBBIN)/libsolverModule
+LIB = $(DAFOAM_ROOT_PATH)/OpenFOAM/sharedLibs/libsolverModule$(WM_CODI_AD_LIB_POSTFIX)
 

@@ -1,4 +1,4 @@
 #! /bin/sh
 
-wmake solver
-wmake hisa
+wmake -j solver
+wmake -j hisa
