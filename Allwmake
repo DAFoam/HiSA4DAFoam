@@ -1,6 +1,6 @@
 #! /bin/bash
 
-set -e
+#set -e
 
 # compile original mode
 echo "***************** Compiling original mode **************"
