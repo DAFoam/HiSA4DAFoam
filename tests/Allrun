@@ -2,7 +2,7 @@
 
 #set -e
 
-cd NACAAirFoil
+cd airfoil
 rm -rf processor*
 decomposePar
 mpirun -np 2 hisa -parallel 2>&1 | tee log.txt
