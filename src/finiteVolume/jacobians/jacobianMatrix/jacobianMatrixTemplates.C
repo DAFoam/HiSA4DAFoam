@@ -67,8 +67,8 @@ void jacobianMatrix<nScalar, nVector>::matrixMul
         }
     }
 
-    forN(nScalar,i) sResult[i].primitiveFieldRef() = Zero;
-    forN(nVector,i) vResult[i].primitiveFieldRef() = Zero;
+    forN(nScalar,i) sResult[i].primitiveFieldRef() = pTraits<scalar>::zero;
+    forN(nVector,i) vResult[i].primitiveFieldRef() = vector::zero;
 
     scalarField sTmp(mesh_.nCells());
     vectorField vTmp(mesh_.nCells());

@@ -86,7 +86,7 @@ public:
 
         // return (r + mag(r))/(1 + mag(r)); // Face centred
         scalar cd = (faceFlux >= 0 ? 1.0-cdWeight : cdWeight);  // cdWeight = (x_N - x_f)/(c_N - c_P)
-        scalar psi = (r > 0 ? (r + sqr(r))/(2*r+cd*sqr(1-r)) : 0.0);
+        scalar psi = (r > 0 ? (r + sqr(r))/(2*r+cd*sqr(1-r)) : scalar(0.0));
         return max(min(min(r/cd, psi), 1.0/cd), 0);
     }
 };

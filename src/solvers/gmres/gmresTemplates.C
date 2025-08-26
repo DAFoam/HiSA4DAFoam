@@ -54,13 +54,13 @@ inline void gmres<nScalar, nVector>::givensRotation
     else if (mag(beta) > mag(h))
     {
         scalar tau = -h/beta;
-        s = 1.0/Foam::sqrt(1.0 + sqr(tau));
+        s = 1.0/sqrt(1.0 + sqr(tau));
         c = s*tau;
     }
     else
     {
         scalar tau = -beta/h;
-        c = 1.0/Foam::sqrt(1.0 + sqr(tau));
+        c = 1.0/sqrt(1.0 + sqr(tau));
         s = c*tau;
     }
 }
@@ -410,7 +410,7 @@ label gmres<nScalar, nVector>::solve
         reduce(beta, sumOp<scalar>(), Pstream::msgType(), UPstream::worldComm, reduceRequest[0]);
 
         // Set initial rhs and bh[0] = beta
-        bh = 0;
+        bh = 0.0;
 
         for (label i = 0; i < nDirs; i++)				// Search directions
         {
@@ -437,7 +437,7 @@ label gmres<nScalar, nVector>::solve
             {
                 Pstream::waitRequest(reduceRequest[0]);
             }
-            beta = Foam::sqrt(beta);			        // beta = || r_0 ||
+            beta = sqrt(beta);			        // beta = || r_0 ||
             forN(nScalar,j)
             {
                 sV[j].primitiveFieldRef() /= beta;
@@ -518,7 +518,7 @@ label gmres<nScalar, nVector>::solve
         {
             Pstream::waitRequest(reduceRequest[0]);
         }
-        beta = Foam::sqrt(beta);
+        beta = sqrt(beta);
 
         // Apply Givens rotation to final row
         label i = nDirs;

@@ -134,15 +134,15 @@ void centralLaxFriedrich::boundaryJacobian
     tmp<scalarField>& dEnergyFluxdp, tmp<vectorField>& dEnergyFluxdU, tmp<scalarField>& dEnergyFluxdT
 )
 {
-    dContFluxdp = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dContFluxdU = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dContFluxdT = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dMomFluxdp = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dMomFluxdU = tmp<tensorField>(new tensorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dMomFluxdT = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dEnergyFluxdp = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dEnergyFluxdU = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dEnergyFluxdT = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), Zero));
+    dContFluxdp = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), pTraits<scalar>::zero));
+    dContFluxdU = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), vector::zero));
+    dContFluxdT = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), pTraits<scalar>::zero));
+    dMomFluxdp = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), vector::zero));
+    dMomFluxdU = tmp<tensorField>(new tensorField(mesh_.boundary()[patchi].patch().size(), tensor::zero));
+    dMomFluxdT = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), vector::zero));
+    dEnergyFluxdp = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), pTraits<scalar>::zero));
+    dEnergyFluxdU = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), vector::zero));
+    dEnergyFluxdT = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), pTraits<scalar>::zero));
 }
 
 

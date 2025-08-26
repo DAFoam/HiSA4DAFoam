@@ -45,7 +45,7 @@ characteristicFarfieldPressureFvPatchScalarField
     characteristicBase(p)
 {
     refValue() = patchInternalField();
-    refGrad() = 0;
+    refGrad() = 0.0;
     valueFraction() = 1;
 }
 
@@ -89,7 +89,7 @@ characteristicFarfieldPressureFvPatchScalarField
     }
 
     refValue() = *this;
-    refGrad() = 0;
+    refGrad() = 0.0;
     valueFraction() = 1;
 }
 
@@ -147,7 +147,7 @@ void Foam::characteristicFarfieldPressureFvPatchScalarField::updateCoeffs()
 
     scalarField& pp = refValue();
     valueFraction() = 1;
-    refGrad() = 0;
+    refGrad() = 0.0;
 
     // get the near patch internal cell values
     const scalarField p(patchInternalField());

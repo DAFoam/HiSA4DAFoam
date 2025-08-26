@@ -170,9 +170,9 @@ bool Foam::functionObjects::shockRefinement::calc()
     volScalarField level = max(markedComp*compLevel, markedExp*expLevel);
     forAll(level, cellI)
     {
-        level[cellI] = label(level[cellI]);
+        level[cellI] = round(level[cellI]);
     }
-    volScalarField marked = min(markedComp+markedExp, 1.0);
+    volScalarField marked = min(markedComp+markedExp, scalar(1.0));
 
     Info << "    " << sum(markedComp).value() << " cells marked as compression shocks" << nl;
     Info << "    " << sum(markedExp).value() << " cells marked as expansion shocks" << nl;
@@ -205,17 +205,24 @@ bool Foam::functionObjects::shockRefinement::calc()
         {
             const volScalarField& initCellLevel =
                 mesh().lookupObject<volScalarField>("initCellLevel");
+            /*
             refinementControl.primitiveFieldRef() =
             (
-                marked*min(max(level-(cellLevel-initCellLevel.internalField()), -1.0), 1.0)
+                marked*min(max(level-(cellLevel-initCellLevel.internalField()), scalar(-1.0)), scalar(1.0))
             );
+            */
+
+           FatalErrorIn("calc") << "NOT AD" << abort(FatalError);
         }
         else
         {
+            /*
             refinementControl.primitiveFieldRef() =
             (
-                marked*min(max(level-cellLevel, -1.0), 1.0)
+                marked*min(max(level-cellLevel, scalar(-1.0)), scalar(1.0))
             );
+            */
+           FatalErrorIn("calc") << "NOT AD" << abort(FatalError);
         }
         refinementControl.correctBoundaryConditions();
     }
@@ -331,7 +338,7 @@ bool Foam::functionObjects::shockRefinement::read(const dictionary& dict)
     if (mesh().foundObject<volScalarField>("initCellLevel"))
     {
         maxInitCellLevel = 
-            label(max(mesh().lookupObject<volScalarField>("initCellLevel")).value());
+            round(max(mesh().lookupObject<volScalarField>("initCellLevel")).value());
     }
 
     UInf_ = vector(dict.lookup("UInf"));
