@@ -52,11 +52,20 @@ int main(int argc, char *argv[])
     #include "setRootCase.H"
 
     #include "createTime.H"
+    
+    word regionName = fvMesh::defaultRegion;
+    autoPtr<fvMesh> mesh(
+        new fvMesh(
+            IOobject(
+                regionName,
+                runTime.timeName(),
+                runTime,
+                IOobject::MUST_READ)));
 
     dictionary dict;
     dict.add("solver", MODULE);
     autoPtr<solverModule> solverPtr =
-        solverModule::New(Foam::polyMesh::defaultRegion, runTime, dict);
+        solverModule::New(Foam::polyMesh::defaultRegion, runTime, mesh, dict);
 
     solverModule& solver = solverPtr();
 

@@ -57,6 +57,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
 (
     const word& name,
     const Time& t,
+    autoPtr<fvMesh> mesh,
     const dictionary& solverDict
 )
 {
@@ -79,7 +80,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
         FatalErrorIn
         (
             "solverModule::New"
-            "(const word& name, const Time&, const dictionary&)"
+            "(const word& name, const Time&, autoPtr<fvMesh>, const dictionary&)"
         )   << "Unknown solver type "
             << solverType << nl << nl
             << "Table of solverModules is empty" << endl
@@ -94,7 +95,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
         FatalErrorIn
         (
             "solverModule::New"
-            "(const word& name, const Time&, const dictionary&)"
+            "(const word& name, const Time&, autoPtr<fvMesh>, const dictionary&)"
         )   << "Unknown solver type "
             << solverType << nl << nl
             << "Valid solvers are : " << nl
@@ -102,7 +103,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
             << exit(FatalError);
     }
 
-    return autoPtr<solverModule>(cstrIter()(name, t, solverDict));
+    return autoPtr<solverModule>(cstrIter()(name, t, mesh, solverDict));
 }
 
 
@@ -119,16 +120,6 @@ const Foam::word& Foam::solverModule::name() const
     return name_;
 }
 
-
-Foam::autoPtr<Foam::solverModule> Foam::solverModule::iNew::operator()
-(
-    const word& name,
-    Istream& is
-) const
-{
-    dictionary dict(is);
-    return solverModule::New(name, time_, dict);
-}
 
 
 // ************************************************************************* //

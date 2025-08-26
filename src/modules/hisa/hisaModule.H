@@ -197,7 +197,8 @@ public:
         hisaModule
         (
             const word& name,
-            const Time&
+            const Time&,
+            autoPtr<fvMesh>
         );
 
         //- Construct from components
@@ -205,6 +206,7 @@ public:
         (
             const word& name,
             const Time&,
+            autoPtr<fvMesh>,
             const dictionary&
         );
 

@@ -47,6 +47,7 @@ Authors
 #include "typeInfo.H"
 #include "autoPtr.H"
 #include "runTimeSelectionTables.H"
+#include "fvMesh.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -96,8 +97,8 @@ public:
             autoPtr,
             solverModule,
             dictionary,
-            (const word& name, const Time& t, const dictionary& dict),
-            (name, t, dict)
+            (const word& name, const Time& t, autoPtr<fvMesh> mesh, const dictionary& dict),
+            (name, t, mesh, dict)
         );
 
 
@@ -113,27 +114,6 @@ public:
             return autoPtr<solverModule>(nullptr);
         }
 
-        //- Return a pointer to a new solverModule created on freestore
-        //  from Istream
-        class iNew
-        {
-            const Time& time_;
-
-        public:
-
-            iNew(const Time& t)
-            :
-                time_(t)
-            {}
-
-            autoPtr<solverModule> operator()
-            (
-                const word& name,
-                Istream& is
-            ) const;
-        };
-
-
     // Selectors
 
         //- Select from dictionary, based on its "type" entry
@@ -141,6 +121,7 @@ public:
         (
             const word& name,
             const Time&,
+            autoPtr<fvMesh>,
             const dictionary&
         );
 

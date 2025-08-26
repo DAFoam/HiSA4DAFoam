@@ -281,11 +281,13 @@ void hisaModule::redistributePar()
 hisaModule::hisaModule
 (
     const word& name,
-    const Time& t
+    const Time& t,
+    autoPtr<fvMesh> mesh
 )
 :
     solverModule(name),
-    time_(t)
+    time_(t),
+    mesh_(mesh)
 {
 }
 
@@ -293,11 +295,13 @@ hisaModule::hisaModule
 (
     const word& name,
     const Time& t,
+    autoPtr<fvMesh> mesh,
     const dictionary& dict
 )
 :
     solverModule(name),
-    time_(t)
+    time_(t),
+    mesh_(mesh)
 {
 }
 
@@ -308,7 +312,8 @@ void hisaModule::initialise()
 
     const Time& runTime = time_;
 
-    #include "createDynamicFvMesh.H"
+    // #include "createDynamicFvMesh.H"
+    fvMesh& mesh = mesh_();
 
     // Detect steady-state analysis
     const dictionary& ddtControls = mesh.schemesDict().subDict("ddtSchemes");
