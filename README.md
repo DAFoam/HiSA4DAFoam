@@ -1,7 +1,7 @@
-HiSA-v1812
-==========
+HiSA4DAFoam
+===========
 
-A modified version of the HiSA for DAFoam
+A modified version of the HiSA (commit #12469db05) for DAFoam
 
 The source of the HISA solver. 
 See:
