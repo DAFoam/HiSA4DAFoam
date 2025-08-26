@@ -1,5 +1,24 @@
 #! /bin/bash
 
-cd src && { ./Allwmake; cd ..; }
+set -e
 
-cd applications && { ./Allwmake; cd ..; }
+# compile original mode
+echo "***************** Compiling original mode **************"
+. $DAFOAM_ROOT_PATH/loadDAFoam.sh
+
+cd src && ./Allwmake && cd -
+
+cd applications && ./Allwmake && cd -
+
+echo "***************** Compiling ADF mode **************"
+. $DAFOAM_ROOT_PATH/loadDAFoam.sh
+. $DAFOAM_ROOT_PATH/OpenFOAM/OpenFOAM-v1812-ADR/etc/bashrc
+
+cd src && ./Allwmake && cd -
+
+# reset the OpenFOAM environment to the original mode
+. $DAFOAM_ROOT_PATH/loadDAFoam.sh
+
+echo "*** Build Successful! ***"
+
+
