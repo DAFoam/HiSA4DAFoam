@@ -33,15 +33,11 @@ EXE_INC = \
     $(FOAM_VERSION) \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
-    -I../../../src/modules/solver/lnInclude \
-    -I../../../src/modules/hisa/lnInclude \
-    -I../../../src/solvers/lnInclude
+    -I../../../src/lnInclude
 
 EXE_LIBS = \
     -lfiniteVolume \
     -lmeshTools \
     -L$(DAFOAM_ROOT_PATH)/OpenFOAM/sharedLibs \
-    -lsolverModule \
-    -lhisaModule \
-    -lhisaSolvers
+    -lHiSA
 

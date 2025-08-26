@@ -1,5 +1,0 @@
-shockRefinement/shockRefinement.C
-writeFields/writeFields.C
-writeCellNumbering/writeCellNumbering.C
-
-LIB = $(DAFOAM_ROOT_PATH)/OpenFOAM/sharedLibs/libhisaFunctionObjects$(WM_CODI_AD_LIB_POSTFIX)

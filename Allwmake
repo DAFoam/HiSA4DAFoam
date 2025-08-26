@@ -6,15 +6,15 @@
 echo "***************** Compiling original mode **************"
 . $DAFOAM_ROOT_PATH/loadDAFoam.sh
 
-cd src && ./Allwmake && cd -
+cd src && wmake -j && cd -
 
-cd applications && ./Allwmake && cd -
+cd applications/singleRegionSolvers && wmake hisa && cd -
 
-echo "***************** Compiling ADF mode **************"
+echo "***************** Compiling ADR mode **************"
 . $DAFOAM_ROOT_PATH/loadDAFoam.sh
 . $DAFOAM_ROOT_PATH/OpenFOAM/OpenFOAM-v1812-ADR/etc/bashrc
 
-cd src && ./Allwmake && cd -
+cd src && wmake -j && cd -
 
 # reset the OpenFOAM environment to the original mode
 . $DAFOAM_ROOT_PATH/loadDAFoam.sh
