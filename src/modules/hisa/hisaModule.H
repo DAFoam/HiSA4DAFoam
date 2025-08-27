@@ -53,11 +53,12 @@ Authors
 #include "zeroGradientFvPatchFields.H"
 #include "fixedRhoFvPatchScalarField.H"
 #include "fluxScheme.H"
-#include "pseudotimeControl/pseudotimeControl.H"
+#include "pseudotimeControl.H"
 #include "jacobian.H"
 #include "upwind.H"
 #include "preconditioner.H"
 #include "faceSet.H"
+#include "regIOobject.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -70,6 +71,7 @@ namespace Foam
 
 class hisaModule
 :
+    public regIOobject,
     public solverModule
 {
 
@@ -241,6 +243,12 @@ public:
         virtual bool steadyState()
         {
             return steadyState_;
+        }
+
+        /// virtual function for regIOobject
+        bool writeData(Ostream& os) const
+        {
+            return true;
         }
 };
 

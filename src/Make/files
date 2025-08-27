@@ -38,7 +38,7 @@ functionObjects/shockRefinement/shockRefinement.C
 functionObjects/writeFields/writeFields.C
 functionObjects/writeCellNumbering/writeCellNumbering.C
 
-modules/hisa/pseudotimeControl/pseudotimeControl.C
+modules/hisa/pseudotimeControl.C
 modules/hisa/hisaModule.C
 modules/hisa/hisaModuleTimestepping.C
 modules/solver/solverModule.C

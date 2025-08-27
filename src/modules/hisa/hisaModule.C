@@ -285,10 +285,21 @@ hisaModule::hisaModule
     fvMesh& mesh
 )
 :
+    regIOobject(
+        IOobject(
+            "hisaSolver", // always use hisaSolver for the db name
+            mesh.time().timeName(),
+            mesh, // register to mesh
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            true // always register object
+            )),
     solverModule(name),
     time_(t),
     mesh_(mesh)
 {
+    // make it visible via mesh.thisDb().lookupObject(...)
+    //this->store();
 }
 
 hisaModule::hisaModule
@@ -299,10 +310,21 @@ hisaModule::hisaModule
     const dictionary& dict
 )
 :
+    regIOobject(
+        IOobject(
+            "hisaSolver", // always use hisaSolver for the db name
+            mesh.time().timeName(),
+            mesh, // register to mesh
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            true // always register object
+            )),
     solverModule(name),
     time_(t),
     mesh_(mesh)
 {
+    // make it visible via mesh.thisDb().lookupObject(...)
+    //this->store();
 }
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
@@ -480,7 +502,7 @@ scalar hisaModule::timeStepScaling(const scalar& maxCoNum)
     psiThermo& thermo = pThermo_();
     volVectorField& U = U_();
 
-    Info << "Mesh region: " << name() << endl;
+    // Info << "Mesh region: " << name() << endl;
 
     #include "compressibleCourantNo.H"
 
