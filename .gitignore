@@ -1,0 +1,12 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+
+# MacOS files
+.DS_Store
+._*
+
+
+# OpenFOAM make temp files
+*.so
+src/Make/linux64*
+src/lnInclude
+applications/singleRegionSolvers/hisa/Make/linux64*
