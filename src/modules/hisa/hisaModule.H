@@ -85,7 +85,7 @@ protected:
         //- Reference to the time database
         const Time& time_;
 
-        autoPtr<fvMesh> mesh_;
+        fvMesh& mesh_;
 
         autoPtr< pseudotimeControl > solnControl_;
 
@@ -198,7 +198,7 @@ public:
         (
             const word& name,
             const Time&,
-            autoPtr<fvMesh>
+            fvMesh&
         );
 
         //- Construct from components
@@ -206,7 +206,7 @@ public:
         (
             const word& name,
             const Time&,
-            autoPtr<fvMesh>,
+            fvMesh&,
             const dictionary&
         );
 
@@ -227,7 +227,7 @@ public:
         //- Should return the mesh created during initialise
         virtual fvMesh& mesh()
         {
-            return mesh_();
+            return mesh_;
         }
 
         //- Should return the solution control created during initialise

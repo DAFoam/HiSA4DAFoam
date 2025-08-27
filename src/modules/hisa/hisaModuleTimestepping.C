@@ -45,7 +45,7 @@ namespace Foam
 
 void hisaModule::setPseudoDeltaT()
 {
-    const fvMesh& mesh = mesh_();
+    const fvMesh& mesh = mesh_;
     volScalarField& rPseudoDeltaT = rPseudoDeltaT_();
     {
         tmp< volScalarField > gamma = pThermo_->gamma();

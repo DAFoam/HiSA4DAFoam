@@ -113,7 +113,7 @@ void hisaModule::parallelSyncFields(const wordList& fields)
 {
     forAll(fields, i)
     {
-        FieldType& f = const_cast<FieldType&>(mesh_->lookupObject<FieldType>(fields[i]));
+        FieldType& f = const_cast<FieldType&>(mesh_.lookupObject<FieldType>(fields[i]));
         forAll(f.boundaryField(), patchI)
         {
             if (isA<processorFvPatchField<Type>>(f.boundaryField()[patchI]))
@@ -133,7 +133,7 @@ void hisaModule::parallelSyncFields(const wordList& fields)
 
 void hisaModule::redistributePar()
 {
-    fvMesh& mesh = mesh_();
+    fvMesh& mesh = mesh_;
 
     // Check load balance
     scalarList procLoad(Pstream::nProcs(), 0.0);
@@ -282,7 +282,7 @@ hisaModule::hisaModule
 (
     const word& name,
     const Time& t,
-    autoPtr<fvMesh> mesh
+    fvMesh& mesh
 )
 :
     solverModule(name),
@@ -295,7 +295,7 @@ hisaModule::hisaModule
 (
     const word& name,
     const Time& t,
-    autoPtr<fvMesh> mesh,
+    fvMesh& mesh,
     const dictionary& dict
 )
 :
@@ -313,7 +313,7 @@ void hisaModule::initialise()
     const Time& runTime = time_;
 
     // #include "createDynamicFvMesh.H"
-    fvMesh& mesh = mesh_();
+    fvMesh& mesh = mesh_;
 
     // Detect steady-state analysis
     const dictionary& ddtControls = mesh.schemesDict().subDict("ddtSchemes");
@@ -476,7 +476,7 @@ scalar hisaModule::timeStepScaling(const scalar& maxCoNum)
 {
 
     const Time& runTime = time_;
-    fvMesh& mesh = mesh_();
+    fvMesh& mesh = mesh_;
     psiThermo& thermo = pThermo_();
     volVectorField& U = U_();
 
@@ -534,9 +534,9 @@ void hisaModule::beginTimeStep()
     );
     
     rebalance_ = 
-        mesh_->time().controlDict().lookupOrDefault<Switch>("rebalance", false);
+        mesh_.time().controlDict().lookupOrDefault<Switch>("rebalance", false);
     maxLoadImbalance_ = 
-        mesh_->time().controlDict().lookupOrDefault<scalar>("maxLoadImbalance", 0.1);
+        mesh_.time().controlDict().lookupOrDefault<scalar>("maxLoadImbalance", 0.1);
 }
 
 void hisaModule::outerIteration()
@@ -833,7 +833,7 @@ void hisaModule::outerIteration()
 void hisaModule::findDebugCell()
 {
     // Code adapted from findRefCell.C
-    const dictionary& dict = mesh_->time().controlDict();
+    const dictionary& dict = mesh_.time().controlDict();
     if (dict.found("debugCell"))
     {
         cellDebugging_ = true;
@@ -841,7 +841,7 @@ void hisaModule::findDebugCell()
         if (!Pstream::parRun() || Pstream::myProcNo() == readLabel(dict.lookup("debugProcessor")))
         {
             debugCell_ = readLabel(dict.lookup("debugCell"));
-            if (debugCell_ < 0 || debugCell_ >= mesh_->nCells())
+            if (debugCell_ < 0 || debugCell_ >= mesh_.nCells())
             {
                 debugCell_ = -1;
                 Pout << "Debug cell " << debugCell_ << " is out of range." << endl;
@@ -865,7 +865,7 @@ void hisaModule::findDebugCell()
         point debugPoint(dict.lookup("debugPoint"));
 
         // Try fast approximate search avoiding octree construction
-        debugCell_ = mesh_->findCell(debugPoint, polyMesh::FACE_PLANES);
+        debugCell_ = mesh_.findCell(debugPoint, polyMesh::FACE_PLANES);
 
         label hasRef = (debugCell_ >= 0 ? 1 : 0);
         label sumHasRef = returnReduce<label>(hasRef, sumOp<label>());
@@ -874,7 +874,7 @@ void hisaModule::findDebugCell()
         // with cell tet-decompositoin
         if (sumHasRef != 1)
         {
-            debugCell_ = mesh_->findCell(debugPoint);
+            debugCell_ = mesh_.findCell(debugPoint);
 
             hasRef = (debugCell_ >= 0 ? 1 : 0);
             sumHasRef = returnReduce<label>(hasRef, sumOp<label>());

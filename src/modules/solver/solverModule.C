@@ -57,7 +57,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
 (
     const word& name,
     const Time& t,
-    autoPtr<fvMesh> mesh,
+    fvMesh& mesh,
     const dictionary& solverDict
 )
 {
@@ -80,7 +80,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
         FatalErrorIn
         (
             "solverModule::New"
-            "(const word& name, const Time&, autoPtr<fvMesh>, const dictionary&)"
+            "(const word& name, const Time&, fvMesh&, const dictionary&)"
         )   << "Unknown solver type "
             << solverType << nl << nl
             << "Table of solverModules is empty" << endl
@@ -95,7 +95,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
         FatalErrorIn
         (
             "solverModule::New"
-            "(const word& name, const Time&, autoPtr<fvMesh>, const dictionary&)"
+            "(const word& name, const Time&, fvMesh&, const dictionary&)"
         )   << "Unknown solver type "
             << solverType << nl << nl
             << "Valid solvers are : " << nl

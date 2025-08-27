@@ -97,7 +97,7 @@ public:
             autoPtr,
             solverModule,
             dictionary,
-            (const word& name, const Time& t, autoPtr<fvMesh> mesh, const dictionary& dict),
+            (const word& name, const Time& t, fvMesh& mesh, const dictionary& dict),
             (name, t, mesh, dict)
         );
 
@@ -121,7 +121,7 @@ public:
         (
             const word& name,
             const Time&,
-            autoPtr<fvMesh>,
+            fvMesh&,
             const dictionary&
         );
 

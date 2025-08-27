@@ -54,13 +54,12 @@ int main(int argc, char *argv[])
     #include "createTime.H"
     
     word regionName = fvMesh::defaultRegion;
-    autoPtr<fvMesh> mesh(
-        new fvMesh(
-            IOobject(
-                regionName,
-                runTime.timeName(),
-                runTime,
-                IOobject::MUST_READ)));
+    fvMesh mesh(
+        IOobject(
+            regionName,
+            runTime.timeName(),
+            runTime,
+            IOobject::MUST_READ));
 
     dictionary dict;
     dict.add("solver", MODULE);
