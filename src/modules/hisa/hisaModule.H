@@ -58,7 +58,6 @@ Authors
 #include "upwind.H"
 #include "preconditioner.H"
 #include "faceSet.H"
-#include "regIOobject.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -71,7 +70,6 @@ namespace Foam
 
 class hisaModule
 :
-    public regIOobject,
     public solverModule
 {
 
@@ -245,11 +243,7 @@ public:
             return steadyState_;
         }
 
-        /// virtual function for regIOobject
-        bool writeData(Ostream& os) const
-        {
-            return true;
-        }
+        
 };
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

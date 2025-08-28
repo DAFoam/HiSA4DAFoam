@@ -45,8 +45,17 @@ defineRunTimeSelectionTable(solverModule, dictionary);
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::solverModule::solverModule(const word& name)
+Foam::solverModule::solverModule(const word& name, const fvMesh& mesh)
 :
+    regIOobject(
+        IOobject(
+            "hisaSolver", // always use hisaSolver for the db name
+            mesh.time().timeName(),
+            mesh, // register to mesh
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            true // always register object
+            )),
     name_(name)
 {}
 

@@ -48,6 +48,7 @@ Authors
 #include "autoPtr.H"
 #include "runTimeSelectionTables.H"
 #include "fvMesh.H"
+#include "regIOobject.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -66,6 +67,7 @@ class solutionControl;
 \*---------------------------------------------------------------------------*/
 
 class solverModule
+    : public regIOobject
 {
     // Private data
 
@@ -105,7 +107,7 @@ public:
     // Constructors
 
         //- Construct from components
-        solverModule(const word& name);
+        solverModule(const word& name, const fvMesh& mesh);
 
         //- Return clone
         autoPtr<solverModule> clone() const
@@ -157,6 +159,12 @@ public:
         //- Should return whether analysis is steady or transient. If steady,
         // time loop and outer iterations are one and the same.
         virtual bool steadyState() = 0;
+
+        /// virtual function for regIOobject
+        bool writeData(Ostream& os) const
+        {
+            return true;
+        }
 };
 
 
