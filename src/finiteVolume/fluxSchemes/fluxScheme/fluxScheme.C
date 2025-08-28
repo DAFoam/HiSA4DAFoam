@@ -47,8 +47,19 @@ defineRunTimeSelectionTable(fluxScheme, dictionary);
 fluxScheme::fluxScheme
 (
     const word& type,
-    const dictionary& dict
+    const dictionary& dict,
+    const fvMesh& mesh
 )
+:
+    regIOobject(
+        IOobject(
+            "fluxScheme", // always use fluxScheme for the db name
+            mesh.time().timeName(),
+            mesh, // register to mesh
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            true // always register object
+            ))
 {}
 
 
