@@ -16,6 +16,12 @@ echo "***************** Compiling ADR mode **************"
 
 cd src && wmake -j && cd -
 
+echo "***************** Compiling ADF mode **************"
+. $DAFOAM_ROOT_PATH/loadDAFoam.sh
+. $DAFOAM_ROOT_PATH/OpenFOAM/OpenFOAM-v1812-ADF/etc/bashrc
+
+cd src && wmake -j && cd -
+
 # reset the OpenFOAM environment to the original mode
 . $DAFOAM_ROOT_PATH/loadDAFoam.sh
 
