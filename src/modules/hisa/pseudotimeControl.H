@@ -47,7 +47,6 @@ Authors
 #include "solutionControl.H"
 #endif
 #include "residualIO.H"
-#include "debug.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

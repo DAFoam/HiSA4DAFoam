@@ -80,12 +80,7 @@ gmres<nScalar, nVector>::gmres
 :
     solver<nScalar, nVector>(typeName, dict, jacobian, preconditioner, defaultTol)
 {
-    dictionary* cachedPtr = nullptr;
-    printInfo_ = debug::switchSet
-    (
-        "DebugSwitches",
-        cachedPtr
-    ).lookupOrDefault<label>("SolverPerformance", 1);
+    printInfo_ = this->mesh_.time().controlDict().template lookupOrDefault<Foam::label>("HiSAPrint", Foam::label(1));
 }
 
 

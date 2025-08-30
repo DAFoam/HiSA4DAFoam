@@ -153,12 +153,7 @@ Foam::pseudotimeControl::pseudotimeControl(fvMesh& mesh, const bool steadyState,
         << nl;
     Info<< endl;
 
-    dictionary* cachedPtr = nullptr;
-    printInfo_ = debug::switchSet
-    (
-        "DebugSwitches",
-        cachedPtr
-    ).lookupOrDefault<label>("SolverPerformance", 1);
+    printInfo_ = mesh.time().controlDict().lookupOrDefault<label>("HiSAPrint", 1);
 }
 
 

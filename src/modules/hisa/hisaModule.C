@@ -289,12 +289,7 @@ hisaModule::hisaModule
     time_(t),
     mesh_(mesh)
 {
-    dictionary* cachedPtr = nullptr;
-    printInfo_ = debug::switchSet
-    (
-        "DebugSwitches",
-        cachedPtr
-    ).lookupOrDefault<label>("SolverPerformance", 1);
+    printInfo_ = mesh.time().controlDict().lookupOrDefault<label>("HiSAPrint", 1);
 }
 
 hisaModule::hisaModule
@@ -309,12 +304,7 @@ hisaModule::hisaModule
     time_(t),
     mesh_(mesh)
 {
-    dictionary* cachedPtr = nullptr;
-    printInfo_ = debug::switchSet
-    (
-        "DebugSwitches",
-        cachedPtr
-    ).lookupOrDefault<label>("SolverPerformance", 1);
+    printInfo_ = mesh.time().controlDict().lookupOrDefault<label>("HiSAPrint", 1);
 }
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //

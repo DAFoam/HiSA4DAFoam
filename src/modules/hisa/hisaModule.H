@@ -58,7 +58,6 @@ Authors
 #include "upwind.H"
 #include "preconditioner.H"
 #include "faceSet.H"
-#include "debug.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

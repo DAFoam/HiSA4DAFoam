@@ -51,7 +51,6 @@ Authors
 #include "residualIO.H"
 #include "preconditioner.H"
 #include "solver.H"
-#include "debug.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
