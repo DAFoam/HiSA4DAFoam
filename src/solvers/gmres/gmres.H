@@ -51,6 +51,7 @@ Authors
 #include "residualIO.H"
 #include "preconditioner.H"
 #include "solver.H"
+#include "debug.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -69,6 +70,8 @@ class gmres
     protected:
 
         inline void givensRotation(const scalar& h, const scalar& beta, scalar& c, scalar& s) const;
+
+        label printInfo_ = 1;
 
     public:
         //- Runtime type information

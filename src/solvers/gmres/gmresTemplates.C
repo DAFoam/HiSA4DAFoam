@@ -79,7 +79,14 @@ gmres<nScalar, nVector>::gmres
 )
 :
     solver<nScalar, nVector>(typeName, dict, jacobian, preconditioner, defaultTol)
-{}
+{
+    dictionary* cachedPtr = nullptr;
+    printInfo_ = debug::switchSet
+    (
+        "DebugSwitches",
+        cachedPtr
+    ).lookupOrDefault<label>("SolverPerformance", 1);
+}
 
 
 template <int nScalar, int nVector>
@@ -123,30 +130,34 @@ label gmres<nScalar, nVector>::solve
         }
     }
 
-    Info<< "Solving for (";
-    const labelList& residualOrdering = tol.residualOrdering();
-    for(label i = 0; i < residualOrdering.size(); i++)
+    if (printInfo_)
     {
-        if (i)
+        Info<< "Solving for (";
+        const labelList& residualOrdering = tol.residualOrdering();
+        
+        for(label i = 0; i < residualOrdering.size(); i++)
         {
-            Info << " ";
-        }
-        forAll(sW, j)
-        {
-            if (residualOrdering[j] == i)
+            if (i)
             {
-                Info << sW[j].name();
+                Info << " ";
+            }
+            forAll(sW, j)
+            {
+                if (residualOrdering[j] == i)
+                {
+                    Info << sW[j].name();
+                }
+            }
+            forAll(vW, j)
+            {
+                if (residualOrdering[nScalar+j] == i)
+                {
+                    Info << vW[j].name();
+                }
             }
         }
-        forAll(vW, j)
-        {
-            if (residualOrdering[nScalar+j] == i)
-            {
-                Info << vW[j].name();
-            }
-        }
+        Info << ")" << endl;
     }
-    Info << ")" << endl;
 
     // Allocate variables to hold solved increment
     PtrList<volScalarField> dsW(nScalar);
@@ -384,9 +395,12 @@ label gmres<nScalar, nVector>::solve
 
         if (solverIter == 0 || solverStop)
         {
-            Info<< "  GMRES iteration: " << solverIter << "   Residual: ";
-            Info<< finalRes;
-            Info<< endl;
+            if (printInfo_)
+            {
+                Info<< "  GMRES iteration: " << solverIter << "   Residual: ";
+                Info<< finalRes;
+                Info<< endl;
+            }
         }
 
         if (solverStop)

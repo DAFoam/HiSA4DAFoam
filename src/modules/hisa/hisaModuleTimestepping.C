@@ -135,20 +135,23 @@ void hisaModule::setPseudoDeltaT()
     if (localTimestepping_)
     {
         scalar totCells = mesh.globalData().nTotalCells();
-        Info<< "Pseudo Courant No: "
-            << "Min: "
-            << min(pseudoCoField_()).value()
-            << " Mean: "
-            << sum(pseudoCoField_()).value()/totCells
-            << " Max: "
-            << max(pseudoCoField_()).value() << endl;
-        Info<< "Pseudo deltaT: "
-            << "Min: "
-            << 1.0/max(rPseudoDeltaT).value()
-            << " Mean: "
-            << sum(1.0/rPseudoDeltaT).value()/totCells
-            << " Max: "
-            << 1.0/min(rPseudoDeltaT).value() << endl;
+        if (printInfo_)
+        {
+            Info<< "Pseudo Courant No: "
+                << "Min: "
+                << min(pseudoCoField_()).value()
+                << " Mean: "
+                << sum(pseudoCoField_()).value()/totCells
+                << " Max: "
+                << max(pseudoCoField_()).value() << endl;
+            Info<< "Pseudo deltaT: "
+                << "Min: "
+                << 1.0/max(rPseudoDeltaT).value()
+                << " Mean: "
+                << sum(1.0/rPseudoDeltaT).value()/totCells
+                << " Max: "
+                << 1.0/min(rPseudoDeltaT).value() << endl;
+        }
     }
     else
     {

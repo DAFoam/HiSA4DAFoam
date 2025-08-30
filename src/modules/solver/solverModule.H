@@ -160,6 +160,8 @@ public:
         // time loop and outer iterations are one and the same.
         virtual bool steadyState() = 0;
 
+        virtual bool inviscid() = 0;
+
         /// virtual function for regIOobject
         bool writeData(Ostream& os) const
         {

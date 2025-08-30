@@ -47,6 +47,7 @@ Authors
 #include "solutionControl.H"
 #endif
 #include "residualIO.H"
+#include "debug.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -93,6 +94,8 @@ protected:
 
             //- First iteration or first iteration after restart (no residual computed yet)
             bool firstIteration_;
+
+            label printInfo_ = 1;
 
         // Residuals
 

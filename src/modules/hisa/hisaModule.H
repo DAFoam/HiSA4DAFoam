@@ -58,6 +58,7 @@ Authors
 #include "upwind.H"
 #include "preconditioner.H"
 #include "faceSet.H"
+#include "debug.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -185,6 +186,8 @@ protected:
         //- Search for debug point specified in controlDict
         void findDebugCell();
 
+        label printInfo_ = 1;
+
 public:
 
     //- Runtime type information
@@ -241,6 +244,11 @@ public:
         virtual bool steadyState()
         {
             return steadyState_;
+        }
+
+        virtual bool inviscid()
+        {
+            return inviscid_;
         }
 
         

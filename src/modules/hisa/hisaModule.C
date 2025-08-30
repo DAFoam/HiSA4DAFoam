@@ -289,6 +289,12 @@ hisaModule::hisaModule
     time_(t),
     mesh_(mesh)
 {
+    dictionary* cachedPtr = nullptr;
+    printInfo_ = debug::switchSet
+    (
+        "DebugSwitches",
+        cachedPtr
+    ).lookupOrDefault<label>("SolverPerformance", 1);
 }
 
 hisaModule::hisaModule
@@ -303,6 +309,12 @@ hisaModule::hisaModule
     time_(t),
     mesh_(mesh)
 {
+    dictionary* cachedPtr = nullptr;
+    printInfo_ = debug::switchSet
+    (
+        "DebugSwitches",
+        cachedPtr
+    ).lookupOrDefault<label>("SolverPerformance", 1);
 }
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
@@ -572,55 +584,6 @@ void hisaModule::outerIteration()
     volScalarField rhoPrevIter("rhoPrevIter", rho);
     bounded_ = false;
 
-    phiUp_.set
-    (
-        new surfaceVectorField
-        (
-            IOobject
-            (
-                "phiUp",
-                runTime.timeName(),
-                mesh,
-                IOobject::NO_READ,
-                IOobject::NO_WRITE
-            ),
-            mesh,
-            dimArea*rhoU.dimensions()*U.dimensions()
-        )
-    );
-    phiEp_.set
-    (
-        new surfaceScalarField
-        (
-            IOobject
-            (
-                "phiEp",
-                runTime.timeName(),
-                mesh,
-                IOobject::NO_READ,
-                IOobject::NO_WRITE
-            ),
-            mesh,
-            dimArea*rhoE.dimensions()*U.dimensions()
-        )
-    );
-    Up_.set
-    (
-        new surfaceVectorField
-        (
-            IOobject
-            (
-                "Up",
-                runTime.timeName(),
-                mesh,
-                IOobject::NO_READ,
-                IOobject::NO_WRITE
-            ),
-            mesh,
-            dimArea*U.dimensions()
-        )
-    );
-
     surfaceVectorField& phiUp = phiUp_();
     surfaceScalarField& phiEp = phiEp_();
     surfaceVectorField& Up = Up_();
@@ -819,9 +782,9 @@ void hisaModule::outerIteration()
         pseudoCoField_() *= factor;
     }
 
-    phiUp_.clear();
-    phiEp_.clear();
-    Up_.clear();
+    //phiUp_.clear();
+    //phiEp_.clear();
+    //Up_.clear();
 
     // Update fields
     #include "updateFields.H"
