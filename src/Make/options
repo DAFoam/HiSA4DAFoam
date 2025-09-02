@@ -1,0 +1,33 @@
+include ../buildDefs.include
+
+EXE_INC = -g \
+    -std=c++11 \
+    -Wno-old-style-cast \
+    -Wno-conversion-null \
+    -Wno-deprecated-copy \
+    $(FOAM_VERSION) \
+    $(BLUECFD) \
+    -I./lnInclude \
+    -I./fvjMatrix \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/specie/lnInclude \
+    $(TURB_INC) \
+    $(DYN_MESH_INCLUDE) \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/parallel/decompose/decompositionMethods/lnInclude
+
+LIB_LIBS = \
+    -lOpenFOAM$(WM_CODI_AD_LIB_POSTFIX) \
+    -lfiniteVolume$(WM_CODI_AD_LIB_POSTFIX) \
+    -lmeshTools$(WM_CODI_AD_LIB_POSTFIX) \
+    -ldynamicMesh$(WM_CODI_AD_LIB_POSTFIX) \
+    -lcompressibleTransportModels$(WM_CODI_AD_LIB_POSTFIX) \
+    -lcompressibleTurbulenceModels$(WM_CODI_AD_LIB_POSTFIX) \
+    -lfluidThermophysicalModels$(WM_CODI_AD_LIB_POSTFIX) \
+    -lspecie$(WM_CODI_AD_LIB_POSTFIX) \
+    -lcompressibleTurbulenceModels$(WM_CODI_AD_LIB_POSTFIX) \
+    -ltopoChangerFvMesh$(WM_CODI_AD_LIB_POSTFIX) \
+    -ldecompositionMethods$(WM_CODI_AD_LIB_POSTFIX) \
+    -L$(FOAM_LIBBIN)/dummy -lptscotchDecomp$(WM_CODI_AD_LIB_POSTFIX)
+

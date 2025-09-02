@@ -62,7 +62,7 @@ Authors
 #endif
 #include "zeroGradientFvPatchFields.H"
 #include "fluxScheme.H"
-#include "pseudotimeControl/pseudotimeControl.H"
+#include "pseudotimeControl.H"
 #include "jacobian.H"
 #include "upwind.H"
 #include "preconditioner.H"

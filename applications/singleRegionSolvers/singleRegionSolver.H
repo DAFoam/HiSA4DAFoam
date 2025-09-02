@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
         // if not constructed from runTime
         dictionary functionsDict;
 
-        #if OPENFOAM >= 1906
+        #if OPENFOAM >= 1812
         HashSet<wordRe> selectedFields;
         #else
         HashSet<word> selectedFields;
