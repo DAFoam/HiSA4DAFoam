@@ -58,7 +58,7 @@ hllcFluxScheme::hllcFluxScheme
     const volScalarField& rhoE
 )
 :
-    fluxScheme(typeName, dict),
+    fluxScheme(typeName, dict, U.mesh()),
     mesh_(U.mesh()),
     thermo_(thermo),
     rho_(rho),

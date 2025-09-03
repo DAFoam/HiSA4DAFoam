@@ -58,13 +58,13 @@ inline void gmres<nScalar, nVector>::givensRotation
     else if (mag(beta) > mag(h))
     {
         scalar tau = -h/beta;
-        s = 1.0/Foam::sqrt(1.0 + sqr(tau));
+        s = 1.0/sqrt(1.0 + sqr(tau));
         c = s*tau;
     }
     else
     {
         scalar tau = -beta/h;
-        c = 1.0/Foam::sqrt(1.0 + sqr(tau));
+        c = 1.0/sqrt(1.0 + sqr(tau));
         s = c*tau;
     }
 }
@@ -83,7 +83,9 @@ gmres<nScalar, nVector>::gmres
 )
 :
     hisaSolver<nScalar, nVector>(typeName, dict, jacobian, preconditioner, defaultTol)
-{}
+{
+    printInfo_ = this->mesh_.time().controlDict().template lookupOrDefault<Foam::label>("HiSAPrint", Foam::label(1));
+}
 
 
 template <int nScalar, int nVector>
@@ -127,30 +129,33 @@ label gmres<nScalar, nVector>::solve
         }
     }
 
-    Info<< "Solving for (";
-    const labelList& residualOrdering = tol.residualOrdering();
-    for(label i = 0; i < residualOrdering.size(); i++)
+    if (printInfo_)
     {
-        if (i)
+        Info<< "Solving for (";
+        const labelList& residualOrdering = tol.residualOrdering();
+        for(label i = 0; i < residualOrdering.size(); i++)
         {
-            Info << " ";
-        }
-        forAll(sW, j)
-        {
-            if (residualOrdering[j] == i)
+            if (i)
             {
-                Info << sW[j].name();
+                Info << " ";
+            }
+            forAll(sW, j)
+            {
+                if (residualOrdering[j] == i)
+                {
+                    Info << sW[j].name();
+                }
+            }
+            forAll(vW, j)
+            {
+                if (residualOrdering[nScalar+j] == i)
+                {
+                    Info << vW[j].name();
+                }
             }
         }
-        forAll(vW, j)
-        {
-            if (residualOrdering[nScalar+j] == i)
-            {
-                Info << vW[j].name();
-            }
-        }
+        Info << ")" << endl;
     }
-    Info << ")" << endl;
 
     // Allocate variables to hold solved increment
     PtrList<volScalarField> dsW(nScalar);
@@ -416,9 +421,12 @@ label gmres<nScalar, nVector>::solve
 
         if (solverIter == 0 || solverStop)
         {
-            Info<< "  GMRES iteration: " << solverIter << "   Residual: ";
-            Info<< finalRes;
-            Info<< endl;
+            if (printInfo_)
+            {
+                Info<< "  GMRES iteration: " << solverIter << "   Residual: ";
+                Info<< finalRes;
+                Info<< endl;
+            }
         }
 
         if (solverStop)
@@ -447,7 +455,7 @@ label gmres<nScalar, nVector>::solve
         #endif
 
         // Set initial rhs and bh[0] = beta
-        bh = 0;
+        bh = 0.0;
 
         for (label i = 0; i < nDirs; i++)				// Search directions
         {
@@ -477,7 +485,7 @@ label gmres<nScalar, nVector>::solve
             {
                 Pstream::waitRequest(reduceRequest[0]);
             }
-            beta = Foam::sqrt(beta);			        // beta = || r_0 ||
+            beta = sqrt(beta);			        // beta = || r_0 ||
             forN(nScalar,j)
             {
                 sV[j].primitiveFieldRef() /= beta;
@@ -571,7 +579,7 @@ label gmres<nScalar, nVector>::solve
         {
             Pstream::waitRequest(reduceRequest[0]);
         }
-        beta = Foam::sqrt(beta);
+        beta = sqrt(beta);
 
         // Apply Givens rotation to final row
         label i = nDirs;

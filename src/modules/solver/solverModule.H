@@ -47,6 +47,8 @@ Authors
 #include "typeInfo.H"
 #include "autoPtr.H"
 #include "runTimeSelectionTables.H"
+#include "fvMesh.H"
+#include "regIOobject.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -65,6 +67,7 @@ class solutionControl;
 \*---------------------------------------------------------------------------*/
 
 class solverModule
+    : public regIOobject
 {
     // Private data
 
@@ -94,15 +97,15 @@ public:
             autoPtr,
             solverModule,
             dictionary,
-            (const word& name, const Time& t, const dictionary& dict),
-            (name, t, dict)
+            (const word& name, const Time& t, fvMesh& mesh, const dictionary& dict),
+            (name, t, mesh, dict)
         );
 
 
     // Constructors
 
         //- Construct from components
-        solverModule(const word& name);
+        solverModule(const word& name, const fvMesh& mesh);
 
         //- Return clone
         autoPtr<solverModule> clone() const
@@ -111,27 +114,6 @@ public:
             return autoPtr<solverModule>(nullptr);
         }
 
-        //- Return a pointer to a new solverModule created on freestore
-        //  from Istream
-        class iNew
-        {
-            const Time& time_;
-
-        public:
-
-            iNew(const Time& t)
-            :
-                time_(t)
-            {}
-
-            autoPtr<solverModule> operator()
-            (
-                const word& name,
-                Istream& is
-            ) const;
-        };
-
-
     // Selectors
 
         //- Select from dictionary, based on its "type" entry
@@ -139,6 +121,7 @@ public:
         (
             const word& name,
             const Time&,
+            fvMesh&,
             const dictionary&
         );
 
@@ -177,6 +160,14 @@ public:
         //- Should return whether analysis is steady or transient. If steady,
         // time loop and outer iterations are one and the same.
         virtual bool steadyState() = 0;
+
+        virtual bool inviscid() = 0;
+
+        /// virtual function for regIOobject
+        bool writeData(Ostream& os) const
+        {
+            return true;
+        }
 };
 
 

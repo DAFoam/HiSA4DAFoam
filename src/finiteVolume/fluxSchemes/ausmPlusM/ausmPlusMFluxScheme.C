@@ -72,7 +72,7 @@ namespace Foam
         const volVectorField &U,
         const volVectorField &rhoU,
         const volScalarField &rhoE)
-        : fluxScheme(typeName, dict),
+        : fluxScheme(typeName, dict, U.mesh()),
           mesh_(U.mesh()),
           thermo_(thermo),
           rho_(rho),
@@ -238,12 +238,12 @@ namespace Foam
         const surfaceScalarField magnitude_Mach_R("magnitude_Mach_R", mag(Mach_R));
 
         // Eq. 15: Temporary Mach term for weight functions
-        tmp<surfaceScalarField> mach = min(1.0, max(magnitude_Mach_L, magnitude_Mach_R));
+        tmp<surfaceScalarField> mach = min(scalar(1.0), max(magnitude_Mach_L, magnitude_Mach_R));
         const surfaceScalarField f("f", 0.5 * (1 - cos(PI_ * mach.ref())));
         mach.clear();
         // Eq. 20
         // 0.0 for low mach regime; 1.0 for high mach regime
-        const surfaceScalarField f_0("f_0", min(1.0, max(f, sqrMachInf_)));
+        const surfaceScalarField f_0("f_0", min(scalar(1.0), max(f, sqrMachInf_)));
 
         // alpha is constant 3/16 (see remark under Eq. 27)
         const scalar alpha = alpha0_;

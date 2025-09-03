@@ -186,17 +186,17 @@ void laxFriedrichs::boundaryJacobian
     vectorField dEnergyFluxdU(SfB*(rhoEB+pB) + rhoB*UrelBdotSf()*UB());
     scalarField dEnergyFluxdT(UrelBdotSf*(rhoB*cvB-rhoEB/TB));
 
-    scalarField dContFluxdIntp(mesh_.boundary()[patchi].size(), Zero);
-    vectorField dContFluxdIntU(mesh_.boundary()[patchi].size(), Zero);
-    scalarField dContFluxdIntT(mesh_.boundary()[patchi].size(), Zero);
+    scalarField dContFluxdIntp(mesh_.boundary()[patchi].size(), pTraits<scalar>::zero);
+    vectorField dContFluxdIntU(mesh_.boundary()[patchi].size(), vector::zero);
+    scalarField dContFluxdIntT(mesh_.boundary()[patchi].size(), pTraits<scalar>::zero);
 
-    vectorField dMomFluxdIntp(mesh_.boundary()[patchi].size(), Zero);
-    tensorField dMomFluxdIntU(mesh_.boundary()[patchi].size(), Zero);
-    vectorField dMomFluxdIntT(mesh_.boundary()[patchi].size(), Zero);
+    vectorField dMomFluxdIntp(mesh_.boundary()[patchi].size(), vector::zero);
+    tensorField dMomFluxdIntU(mesh_.boundary()[patchi].size(), tensor::zero);
+    vectorField dMomFluxdIntT(mesh_.boundary()[patchi].size(), vector::zero);
 
-    scalarField dEnergyFluxdIntp(mesh_.boundary()[patchi].size(), Zero);
-    vectorField dEnergyFluxdIntU(mesh_.boundary()[patchi].size(), Zero);
-    scalarField dEnergyFluxdIntT(mesh_.boundary()[patchi].size(), Zero);
+    scalarField dEnergyFluxdIntp(mesh_.boundary()[patchi].size(), pTraits<scalar>::zero);
+    vectorField dEnergyFluxdIntU(mesh_.boundary()[patchi].size(), vector::zero);
+    scalarField dEnergyFluxdIntT(mesh_.boundary()[patchi].size(), pTraits<scalar>::zero);
 
     if (isA<BlockCoupledBoundary<scalar>>(pbf[patchi]))
     {

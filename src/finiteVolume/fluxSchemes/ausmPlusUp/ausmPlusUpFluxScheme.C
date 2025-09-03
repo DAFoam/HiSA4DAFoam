@@ -60,7 +60,7 @@ ausmPlusUpFluxScheme::ausmPlusUpFluxScheme
     const volScalarField& rhoE
 )
 :
-    fluxScheme(typeName, dict),
+    fluxScheme(typeName, dict, U.mesh()),
     mesh_(U.mesh()),
     thermo_(thermo),
     rho_(rho),
@@ -148,12 +148,16 @@ void Foam::ausmPlusUpFluxScheme::calcFlux(surfaceScalarField& phi, surfaceVector
                 {
                     scalar ML2p =  0.25*sqr(MLf+1);
                     scalar ML2m = -0.25*sqr(MLf-1);
+                    scalar returnVal = ML2p*(1 - 2*ML2m); 
+                    return returnVal;
                     //return ML2p;             // beta = 0
-                    return ML2p*(1 - 2*ML2m);  // beta = 1/8
+                    //return ML2p*(1 - 2*ML2m);  // beta = 1/8
                 }
                 else
                 {
-                    return max(MLf, 0);
+                    scalar returnVal = max(MLf, 0);
+                    return returnVal;
+                    //return max(MLf, 0);
                 }
             },
             Mach_L()
@@ -169,11 +173,15 @@ void Foam::ausmPlusUpFluxScheme::calcFlux(surfaceScalarField& phi, surfaceVector
                 {
                     scalar ML2p =  0.25*sqr(MLf+1);
                     scalar ML2m = -0.25*sqr(MLf-1);
-                    return ML2p*(2 - MLf - 3*MLf*ML2m);  //alpha = 3/16
+                    scalar returnVal = ML2p*(2 - MLf - 3*MLf*ML2m);
+                    return returnVal;
+                    //return ML2p*(2 - MLf - 3*MLf*ML2m);  //alpha = 3/16
                 }
                 else
                 {
-                    return (MLf > 0 ? 1.0 : 0.0);
+                    scalar returnVal = (MLf > 0 ? 1.0 : 0.0);
+                    return returnVal;
+                    //return (MLf > 0 ? 1.0 : 0.0);
                 }
             },
             Mach_L()
@@ -192,12 +200,16 @@ void Foam::ausmPlusUpFluxScheme::calcFlux(surfaceScalarField& phi, surfaceVector
                 {
                     scalar MR2m = -0.25*sqr(MRf-1);
                     scalar MR2p =  0.25*sqr(MRf+1);
+                    scalar returnVal = MR2m*(1 + 2*MR2p);
+                    return returnVal;
                     //return MR2m;             // beta = 0
-                    return MR2m*(1 + 2*MR2p);  // beta = 1/8
+                    //return MR2m*(1 + 2*MR2p);  // beta = 1/8
                 }
                 else
                 {
-                    return min(MRf, 0);
+                    scalar returnVal = min(MRf, 0);
+                    return returnVal;
+                    //return min(MRf, 0);
                 }
             },
             Mach_R()
@@ -213,11 +225,15 @@ void Foam::ausmPlusUpFluxScheme::calcFlux(surfaceScalarField& phi, surfaceVector
                 {
                     scalar MR2m = -0.25*sqr(MRf-1);
                     scalar MR2p =  0.25*sqr(MRf+1);
-                    return MR2m*(-2 - MRf + 3*MRf*MR2p);  //alpha = 3/16
+                    scalar returnVal = MR2m*(-2 - MRf + 3*MRf*MR2p);
+                    return returnVal;
+                    //return MR2m*(-2 - MRf + 3*MRf*MR2p);  //alpha = 3/16
                 }
                 else
                 {
-                    return (MRf < 0 ? 1.0 : 0.0);
+                    scalar returnVal = (MRf < 0 ? 1.0 : 0.0);
+                    return returnVal;
+                    //return (MRf < 0 ? 1.0 : 0.0);
                 }
             },
             Mach_R()
@@ -238,7 +254,7 @@ void Foam::ausmPlusUpFluxScheme::calcFlux(surfaceScalarField& phi, surfaceVector
 
     // Low Mach number diffusive term
     tmp< surfaceScalarField > M_mean = 0.5*(sqr(un_L) + sqr(un_R))/sqr(c_face());   // Mean local Mach number
-    tmp< surfaceScalarField > MDiff = -0.25*max((1.0-M_mean()),0.0)*(p_R() - p_L())/(0.5*(rho_L()+rho_R())*sqr(c_face()));    // 0 < K_p < 1, Liou suggest 0.25
+    tmp< surfaceScalarField > MDiff = -0.25*max((scalar(1.0)-M_mean()),scalar(0.0))*(p_R() - p_L())/(0.5*(rho_L()+rho_R())*sqr(c_face()));    // 0 < K_p < 1, Liou suggest 0.25
     M_mean.clear();
 
     // Mach_1_2.ref() += MDiff();
@@ -253,7 +269,9 @@ void Foam::ausmPlusUpFluxScheme::calcFlux(surfaceScalarField& phi, surfaceVector
                     (Mach_1_2 < 0.0 && Mach_1_2 + MDiff >= 0.0)
                 )
                 {
-                    return 0.2*MDiff;
+                    scalar returnVal = 0.2*MDiff;
+                    return returnVal;
+                    //return 0.2*MDiff;
                 }
                 else
                 {

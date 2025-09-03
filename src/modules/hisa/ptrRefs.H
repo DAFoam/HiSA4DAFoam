@@ -26,7 +26,7 @@ License
 
     const Time& runTime = time_;
     pseudotimeControl& solnControl = solnControl_();
-    fvMesh& mesh = mesh_();
+    fvMesh& mesh = mesh_;
 
     fluidThermo& thermo = pThermo_();
 

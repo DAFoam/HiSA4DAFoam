@@ -100,7 +100,7 @@ protected:
         //- Reference to the time database
         const Time& time_;
 
-        autoPtr<fvMesh> mesh_;
+        fvMesh& mesh_;
 
         autoPtr< pseudotimeControl > solnControl_;
 
@@ -220,6 +220,8 @@ protected:
         //- Search for debug point specified in controlDict
         void findDebugCell();
 
+        label printInfo_ = 1;
+
 public:
 
     //- Runtime type information
@@ -232,7 +234,8 @@ public:
         hisaModule
         (
             const word& name,
-            const Time&
+            const Time&,
+            fvMesh&
         );
 
         //- Construct from components
@@ -240,6 +243,7 @@ public:
         (
             const word& name,
             const Time&,
+            fvMesh&,
             const dictionary&
         );
 
@@ -263,7 +267,7 @@ public:
         //- Should return the mesh created during initialise
         virtual fvMesh& mesh()
         {
-            return mesh_();
+            return mesh_;
         }
 
         //- Should return the solution control created during initialise
@@ -277,6 +281,11 @@ public:
         virtual bool steadyState()
         {
             return steadyState_;
+        }
+
+        virtual bool inviscid()
+        {
+            return inviscid_;
         }
 };
 

@@ -47,7 +47,7 @@ Authors
 #include "autoPtr.H"
 #include "runTimeSelectionTables.H"
 #include "fluidThermo.H"
-
+#include "regIOobject.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -59,7 +59,7 @@ namespace Foam
 \*---------------------------------------------------------------------------*/
 
 class fluxScheme
-
+    : public regIOobject
 {
 
 protected:
@@ -105,7 +105,8 @@ public:
         fluxScheme
         (
             const word& type,
-            const dictionary& dict
+            const dictionary& dict,
+            const fvMesh& mesh
         );
 
 
@@ -132,6 +133,12 @@ public:
 
         //- Calculate mass, momentum and energy flux
         virtual void calcFlux(surfaceScalarField& phi, surfaceVectorField& phiUp, surfaceScalarField& phiEp, surfaceVectorField& Up) = 0;
+
+        /// virtual function for regIOobject
+        bool writeData(Ostream& os) const
+        {
+            return true;
+        }
 
 };
 

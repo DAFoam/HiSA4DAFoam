@@ -45,8 +45,17 @@ defineRunTimeSelectionTable(solverModule, dictionary);
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::solverModule::solverModule(const word& name)
+Foam::solverModule::solverModule(const word& name, const fvMesh& mesh)
 :
+    regIOobject(
+        IOobject(
+            "hisaSolver", // always use hisaSolver for the db name
+            mesh.time().timeName(),
+            mesh, // register to mesh
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            true // always register object
+            )),
     name_(name)
 {}
 
@@ -57,6 +66,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
 (
     const word& name,
     const Time& t,
+    fvMesh& mesh,
     const dictionary& solverDict
 )
 {
@@ -83,7 +93,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
         FatalErrorIn
         (
             "solverModule::New"
-            "(const word& name, const Time&, const dictionary&)"
+            "(const word& name, const Time&, fvMesh&, const dictionary&)"
         )   << "Unknown solver type "
             << solverType << nl << nl
             << "Table of solverModules is empty" << endl
@@ -102,7 +112,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
         FatalErrorIn
         (
             "solverModule::New"
-            "(const word& name, const Time&, const dictionary&)"
+            "(const word& name, const Time&, fvMesh&, const dictionary&)"
         )   << "Unknown solver type "
             << solverType << nl << nl
             << "Valid solvers are : " << nl
@@ -110,7 +120,7 @@ Foam::autoPtr<Foam::solverModule> Foam::solverModule::New
             << exit(FatalError);
     }
 
-    return autoPtr<solverModule>(cstrIter()(name, t, solverDict));
+    return autoPtr<solverModule>(cstrIter()(name, t, mesh, solverDict));
 }
 
 
@@ -126,17 +136,5 @@ const Foam::word& Foam::solverModule::name() const
 {
     return name_;
 }
-
-
-Foam::autoPtr<Foam::solverModule> Foam::solverModule::iNew::operator()
-(
-    const word& name,
-    Istream& is
-) const
-{
-    dictionary dict(is);
-    return solverModule::New(name, time_, dict);
-}
-
 
 // ************************************************************************* //

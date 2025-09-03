@@ -189,6 +189,67 @@ phi_.reset
 );
 surfaceScalarField& phi = phi_();
 
+phiUp_.set
+(
+    new surfaceVectorField
+    (
+        IOobject
+        (
+            "phiUp",
+            #if FOUNDATION >= 12
+            runTime.name(),
+            #else
+            runTime.timeName(),
+            #endif
+            mesh,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+        mesh,
+        dimensionedVector("phiUp", dimensionSet(1, 1, -2, 0, 0, 0, 0), vector::zero)
+    )
+);
+phiEp_.set
+(
+    new surfaceScalarField
+    (
+        IOobject
+        (
+            "phiEp",
+            #if FOUNDATION >= 12
+            runTime.name(),
+            #else
+            runTime.timeName(),
+            #endif
+            mesh,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+        mesh,
+        dimensionedScalar("phiEp", dimensionSet(1, 2, -3, 0, 0, 0, 0), 0.0)
+    )
+);
+Up_.set
+(
+    new surfaceVectorField
+    (
+        IOobject
+        (
+            "Up",
+            #if FOUNDATION >= 12
+            runTime.name(),
+            #else
+            runTime.timeName(),
+            #endif
+            mesh,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+        mesh,
+        dimensionedVector("Up", dimensionSet(0, 3, -1, 0, 0, 0, 0), vector::zero)
+    )
+);
+
 
 Info<< "Creating turbulence model\n" << endl;
 #if FOUNDATION >= 8

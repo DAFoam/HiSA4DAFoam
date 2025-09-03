@@ -101,15 +101,15 @@ void spectralRadius::boundaryJacobian
     tmp<scalarField>& dEnergyFluxdRho, tmp<vectorField>& dEnergyFluxdRhoU, tmp<scalarField>& dEnergyFluxdRhoE
 )
 {
-    dContFluxdRho = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dContFluxdRhoU = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dContFluxdRhoE = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dMomFluxdRho = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dMomFluxdRhoU = tmp<tensorField>(new tensorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dMomFluxdRhoE = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dEnergyFluxdRho = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dEnergyFluxdRhoU = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dEnergyFluxdRhoE = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), Zero));
+    dContFluxdRho = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), pTraits<scalar>::zero));
+    dContFluxdRhoU = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), vector::zero));
+    dContFluxdRhoE = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), pTraits<scalar>::zero));
+    dMomFluxdRho = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), vector::zero));
+    dMomFluxdRhoU = tmp<tensorField>(new tensorField(mesh_.boundary()[patchi].patch().size(), tensor::zero));
+    dMomFluxdRhoE = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), vector::zero));
+    dEnergyFluxdRho = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), pTraits<scalar>::zero));
+    dEnergyFluxdRhoU = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), vector::zero));
+    dEnergyFluxdRhoE = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), pTraits<scalar>::zero));
 }
 
 

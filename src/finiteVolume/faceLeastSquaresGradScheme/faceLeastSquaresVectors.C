@@ -222,7 +222,11 @@ void Foam::faceLeastSquaresVectors::makeLeastSquaresVectors() const
     // Stabilise before inversion on 1D or 2D meshes
     if (mesh.nSolutionD() < 3)
     {
-        vector emptyCmpt = (Vector<label>::one - mesh.solutionD())/2;
+        vector emptyCmpt = vector::zero;
+        forAll(emptyCmpt, compI)
+        {
+            emptyCmpt[compI] = (1 - mesh.solutionD()[compI])/2;
+        }
         dd += cmptMultiply(emptyCmpt * emptyCmpt, tensor::I);
     }
 

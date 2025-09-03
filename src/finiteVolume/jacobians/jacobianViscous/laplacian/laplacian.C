@@ -130,7 +130,7 @@ void laplacian::boundaryJacobian
 
     const scalarField& magSfB = mesh_.magSf().boundaryField()[patchi];
 
-    tensorField dMomFluxdU(mesh_.boundary()[patchi].patch().size(), Zero);
+    tensorField dMomFluxdU(mesh_.boundary()[patchi].patch().size(), tensor::zero);
     scalarField dMomFluxdUDiag(-muEff_().boundaryField()[patchi]*magSfB);
     dMomFluxdU.replace(tensor::XX, dMomFluxdUDiag);
     dMomFluxdU.replace(tensor::YY, dMomFluxdUDiag);
@@ -138,17 +138,17 @@ void laplacian::boundaryJacobian
 
     scalarField dEnergyFluxdT(-alphaEff_().boundaryField()[patchi]*cvB*magSfB);
 
-    scalarField dContFluxdIntp(mesh_.boundary()[patchi].size(), Zero);
-    vectorField dContFluxdIntU(mesh_.boundary()[patchi].size(), Zero);
-    scalarField dContFluxdIntT(mesh_.boundary()[patchi].size(), Zero);
+    scalarField dContFluxdIntp(mesh_.boundary()[patchi].size(), pTraits<scalar>::zero);
+    vectorField dContFluxdIntU(mesh_.boundary()[patchi].size(), vector::zero);
+    scalarField dContFluxdIntT(mesh_.boundary()[patchi].size(), pTraits<scalar>::zero);
 
-    vectorField dMomFluxdIntp(mesh_.boundary()[patchi].size(), Zero);
-    tensorField dMomFluxdIntU(mesh_.boundary()[patchi].size(), Zero);
-    vectorField dMomFluxdIntT(mesh_.boundary()[patchi].size(), Zero);
+    vectorField dMomFluxdIntp(mesh_.boundary()[patchi].size(), vector::zero);
+    tensorField dMomFluxdIntU(mesh_.boundary()[patchi].size(), tensor::zero);
+    vectorField dMomFluxdIntT(mesh_.boundary()[patchi].size(), vector::zero);
 
-    scalarField dEnergyFluxdIntp(mesh_.boundary()[patchi].size(), Zero);
-    vectorField dEnergyFluxdIntU(mesh_.boundary()[patchi].size(), Zero);
-    scalarField dEnergyFluxdIntT(mesh_.boundary()[patchi].size(), Zero);
+    scalarField dEnergyFluxdIntp(mesh_.boundary()[patchi].size(), pTraits<scalar>::zero);
+    vectorField dEnergyFluxdIntU(mesh_.boundary()[patchi].size(), vector::zero);
+    scalarField dEnergyFluxdIntT(mesh_.boundary()[patchi].size(), pTraits<scalar>::zero);
 
     if (isA<BlockCoupledBoundary<vector>>(ubf[patchi]))
     {
@@ -205,9 +205,9 @@ void laplacian::boundaryJacobian
     vectorField dUdRhoE(mesh_.boundary()[patchi].size(), vector::zero);
     scalarField dTdRhoE(1.0/(cvI*rhoI));
 
-    dContFluxdRho = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dContFluxdRhoU = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), Zero));
-    dContFluxdRhoE = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), Zero));
+    dContFluxdRho = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), pTraits<scalar>::zero));
+    dContFluxdRhoU = tmp<vectorField>(new vectorField(mesh_.boundary()[patchi].patch().size(), vector::zero));
+    dContFluxdRhoE = tmp<scalarField>(new scalarField(mesh_.boundary()[patchi].patch().size(), pTraits<scalar>::zero));
 
     dMomFluxdRho = dMomFluxdIntp*dPdRho + (dMomFluxdIntU & dUdRho) + dMomFluxdIntT*dTdRho;
     dMomFluxdRhoU = dMomFluxdIntp*dPdRhoU + (dMomFluxdIntU & dUdRhoU) + dMomFluxdIntT*dTdRhoU;

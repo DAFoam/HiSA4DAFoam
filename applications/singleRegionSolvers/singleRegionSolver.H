@@ -62,111 +62,6 @@ int main(int argc, char *argv[])
         "Execute functionObjects only"
     );
 
-    if (argList::postProcess(argc, argv))
-    {
-        Foam::timeSelector::addOptions();
-        #include "addRegionOption.H"
-        #include "addFunctionObjectOptions.H"
-
-        // Set functionObject post-processing mode
-        functionObject::postProcess = true;
-
-        #include "setRootCase.H"
-
-        #if OPENFOAM >= 1906
-        if (args.found("list"))
-        #else
-        if (args.optionFound("list"))
-        #endif
-        {
-            #if FOUNDATION >= 11
-            Info<< nl
-                << "Available configured functionObjects:"
-                << listAllConfigFiles
-                   (
-                       functionEntries::includeFuncEntry::functionObjectDictPath
-                   )
-                << endl;
-            #else            
-            functionObjectList::list();
-            #endif
-            return 0;
-        }
-
-        #include "createTime.H"
-        Foam::instantList timeDirs = Foam::timeSelector::select0(runTime, args);
-
-        // Externally stored dictionary for functionObjectList
-        // if not constructed from runTime
-        dictionary functionsDict;
-
-        #if OPENFOAM >= 1812
-        HashSet<wordRe> selectedFields;
-        #else
-        HashSet<word> selectedFields;
-        #endif
-
-        // Construct functionObjectList
-        autoPtr<functionObjectList> functionsPtr;
-
-        autoPtr<solverModule> solverPtr;
-
-        forAll(timeDirs, timei)
-        {
-            runTime.setTime(timeDirs[timei], timei);
-
-            Info<< "Time = " 
-                #if FOUNDATION >= 12
-                << runTime.name() 
-                #else
-                << runTime.timeName() 
-                #endif
-                << endl;
-
-            functionsPtr.clear();
-
-            dictionary dict;
-            dict.add("solver", MODULE);
-            solverPtr = solverModule::New(Foam::polyMesh::defaultRegion, runTime, dict);
-
-            solverPtr->initialise();
-
-            FatalIOError.throwExceptions();
-
-            try
-            {
-                functionsPtr = functionObjectList::New
-                (
-                    args,
-                    runTime
-                    #if !(FOUNDATION >= 12)
-                    , functionsDict
-                    #endif
-                    #if !(FOUNDATION >= 10)
-                    , selectedFields
-                    #endif
-                );
-                functionsPtr->execute();
-
-                // Execute the functionObject 'end()' function for the last time
-                if (timei == timeDirs.size()-1)
-                {
-                    functionsPtr->end();
-                }
-            }
-            catch (IOerror& err)
-            {
-                Warning<< err << endl;
-            }
-
-            Info<< endl;
-        }
-
-        Info<< "End\n" << endl;
-
-        return 0;
-    }
-
     #include "setRootCase.H"
 
 #if OPENFOAM >= 1906
@@ -183,10 +78,18 @@ int main(int argc, char *argv[])
 
     #include "createTime.H"
 
+    word regionName = fvMesh::defaultRegion;
+    fvMesh mesh(
+        IOobject(
+            regionName,
+            runTime.timeName(),
+            runTime,
+            IOobject::MUST_READ));
+
     dictionary dict;
     dict.add("solver", MODULE);
     autoPtr<solverModule> solverPtr =
-        solverModule::New(Foam::polyMesh::defaultRegion, runTime, dict);
+        solverModule::New(Foam::polyMesh::defaultRegion, runTime, mesh, dict);
 
     solverModule& solver = solverPtr();
 

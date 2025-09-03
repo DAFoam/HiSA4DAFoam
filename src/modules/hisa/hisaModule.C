@@ -125,24 +125,30 @@ void hisaModule::createPreconditioners
 hisaModule::hisaModule
 (
     const word& name,
-    const Time& t
+    const Time& t,
+    fvMesh& mesh
 )
 :
-    solverModule(name),
-    time_(t)
+    solverModule(name, mesh),
+    time_(t),
+    mesh_(mesh)
 {
+    printInfo_ = mesh.time().controlDict().lookupOrDefault<label>("HiSAPrint", 1);
 }
 
 hisaModule::hisaModule
 (
     const word& name,
     const Time& t,
+    fvMesh& mesh,
     const dictionary& dict
 )
 :
-    solverModule(name),
-    time_(t)
+    solverModule(name, mesh),
+    time_(t),
+    mesh_(mesh)
 {
+    printInfo_ = mesh.time().controlDict().lookupOrDefault<label>("HiSAPrint", 1);
 }
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
@@ -152,7 +158,8 @@ void hisaModule::initialise()
 
     const Time& runTime = time_;
 
-    #include "createDynamicFvMesh.H"
+    // #include "createDynamicFvMesh.H"
+    fvMesh& mesh = mesh_;
 
     // Detect steady-state analysis
     #if FOUNDATION >= 10
@@ -347,11 +354,11 @@ scalar hisaModule::timeStepScaling(const scalar& maxCoNum)
 {
 
     const Time& runTime = time_;
-    fvMesh& mesh = mesh_();
+    fvMesh& mesh = mesh_;
     fluidThermo& thermo = pThermo_();
     volVectorField& U = U_();
 
-    Info << "Mesh region: " << name() << endl;
+    //Info << "Mesh region: " << name() << endl;
 
     #include "compressibleCourantNo.H"
 
@@ -413,7 +420,7 @@ void hisaModule::preTimeIncrement()
     // in order for old-time field handling to work.
     #if FOUNDATION >= 10
     const Time& runTime = time_;
-    fvMesh& mesh = mesh_();
+    fvMesh& mesh = mesh_;
 
     if (mesh.dynamic())
     {
@@ -491,67 +498,6 @@ void hisaModule::outerIteration()
     // as it introduces too many problems for mesh refinement/redistribution
     volScalarField rhoPrevIter("rhoPrevIter", rho);
     bounded_ = false;
-
-    phiUp_.reset
-    (
-        new surfaceVectorField
-        (
-            IOobject
-            (
-                "phiUp",
-                #if FOUNDATION >= 12
-                runTime.name(),
-                #else
-                runTime.timeName(),
-                #endif
-                mesh,
-                IOobject::NO_READ,
-                IOobject::NO_WRITE
-            ),
-            mesh,
-            dimArea*rhoU.dimensions()*U.dimensions()
-        )
-    );
-    phiEp_.reset
-    (
-        new surfaceScalarField
-        (
-            IOobject
-            (
-                "phiEp",
-                #if FOUNDATION >= 12
-                runTime.name(),
-                #else
-                runTime.timeName(),
-                #endif
-                mesh,
-                IOobject::NO_READ,
-                IOobject::NO_WRITE
-            ),
-            mesh,
-            dimArea*rhoE.dimensions()*U.dimensions()
-        )
-    );
-    Up_.reset
-    (
-        new surfaceVectorField
-        (
-            IOobject
-            (
-                "Up",
-                #if FOUNDATION >= 12
-                runTime.name(),
-                #else
-                runTime.timeName(),
-                #endif
-                mesh,
-                IOobject::NO_READ,
-                IOobject::NO_WRITE
-            ),
-            mesh,
-            dimArea*U.dimensions()
-        )
-    );
 
     surfaceVectorField& phiUp = phiUp_();
     surfaceScalarField& phiEp = phiEp_();
@@ -813,9 +759,9 @@ void hisaModule::outerIteration()
             max(pseudoCoNumMin_/pseudoCoNum_(), pseudoCoDamping_());
     }
 
-    phiUp_.clear();
-    phiEp_.clear();
-    Up_.clear();
+    //phiUp_.clear();
+    //phiEp_.clear();
+    //Up_.clear();
 
     // Update fields
     #include "updateFields.H"
@@ -834,7 +780,7 @@ void hisaModule::outerIteration()
 void hisaModule::findDebugCell()
 {
     // Code adapted from findRefCell.C
-    const dictionary& dict = mesh_->time().controlDict();
+    const dictionary& dict = mesh_.time().controlDict();
     if (dict.found("debugCell"))
     {
         cellDebugging_ = true;
@@ -842,7 +788,7 @@ void hisaModule::findDebugCell()
         if (!Pstream::parRun() || Pstream::myProcNo() == readLabel(dict.lookup("debugProcessor")))
         {
             debugCell_ = readLabel(dict.lookup("debugCell"));
-            if (debugCell_ < 0 || debugCell_ >= mesh_->nCells())
+            if (debugCell_ < 0 || debugCell_ >= mesh_.nCells())
             {
                 debugCell_ = -1;
                 Pout << "Debug cell " << debugCell_ << " is out of range." << endl;
@@ -866,7 +812,7 @@ void hisaModule::findDebugCell()
         point debugPoint(dict.lookup("debugPoint"));
 
         // Try fast approximate search avoiding octree construction
-        debugCell_ = mesh_->findCell(debugPoint, polyMesh::FACE_PLANES);
+        debugCell_ = mesh_.findCell(debugPoint, polyMesh::FACE_PLANES);
 
         label hasRef = (debugCell_ >= 0 ? 1 : 0);
         label sumHasRef = returnReduce<label>(hasRef, sumOp<label>());
@@ -875,7 +821,7 @@ void hisaModule::findDebugCell()
         // with cell tet-decompositoin
         if (sumHasRef != 1)
         {
-            debugCell_ = mesh_->findCell(debugPoint);
+            debugCell_ = mesh_.findCell(debugPoint);
 
             hasRef = (debugCell_ >= 0 ? 1 : 0);
             sumHasRef = returnReduce<label>(hasRef, sumOp<label>());

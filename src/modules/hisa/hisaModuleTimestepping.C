@@ -47,7 +47,7 @@ namespace Foam
 
 void hisaModule::setPseudoDeltaT()
 {
-    const fvMesh& mesh = mesh_();
+    const fvMesh& mesh = mesh_;
     volScalarField& rPseudoDeltaT = rPseudoDeltaT_();
     {
         tmp< volScalarField > gamma = pThermo_->gamma();
@@ -136,24 +136,27 @@ void hisaModule::setPseudoDeltaT()
     Info << "Pseudo Courant No: " << pseudoCoNum_->value() << endl;
     if (localTimestepping_)
     {
-        scalar totCells = mesh.globalData().nTotalCells();
-        if (localTimesteppingBounding_)
+        if (printInfo_)
         {
-            Info<< "Damped pseudo Courant No: "
+            scalar totCells = mesh.globalData().nTotalCells();
+            if (localTimesteppingBounding_)
+            {
+                Info<< "Damped pseudo Courant No: "
+                    << "Min: "
+                    << gMin(pseudoCoField_().primitiveField())
+                    << " Mean: "
+                    << gSum(pseudoCoField_().primitiveField())/totCells
+                    << " Max: "
+                    << gMax(pseudoCoField_().primitiveField()) << endl;
+            }
+            Info<< "Pseudo deltaT: "
                 << "Min: "
-                << gMin(pseudoCoField_().primitiveField())
+                << 1.0/gMax(rPseudoDeltaT.primitiveField())
                 << " Mean: "
-                << gSum(pseudoCoField_().primitiveField())/totCells
+                << gSum(1.0/rPseudoDeltaT.primitiveField())/totCells
                 << " Max: "
-                << gMax(pseudoCoField_().primitiveField()) << endl;
+                << 1.0/gMin(rPseudoDeltaT.primitiveField()) << endl;
         }
-        Info<< "Pseudo deltaT: "
-            << "Min: "
-            << 1.0/gMax(rPseudoDeltaT.primitiveField())
-            << " Mean: "
-            << gSum(1.0/rPseudoDeltaT.primitiveField())/totCells
-            << " Max: "
-            << 1.0/gMin(rPseudoDeltaT.primitiveField()) << endl;
     }
     else
     {
