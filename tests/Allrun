@@ -1,0 +1,12 @@
+#! /bin/bash
+
+#set -e
+
+cd airfoil
+rm -rf processor*
+decomposePar
+mpirun -np 2 hisa -parallel 2>&1 | tee log.txt
+
+python verify.py
+
+
