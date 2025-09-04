@@ -94,6 +94,8 @@ protected:
             //- First iteration or first iteration after restart (no residual computed yet)
             bool firstIteration_;
 
+            label printInfo_ = 1;
+
         // Residuals
 
             residualIO residualTols_;

@@ -133,11 +133,11 @@ void hisaModule::setPseudoDeltaT()
         }
     }
 
-    Info << "Pseudo Courant No: " << pseudoCoNum_->value() << endl;
     if (localTimestepping_)
     {
         if (printInfo_)
         {
+            Info << "Pseudo Courant No: " << pseudoCoNum_->value() << endl;
             scalar totCells = mesh.globalData().nTotalCells();
             if (localTimesteppingBounding_)
             {

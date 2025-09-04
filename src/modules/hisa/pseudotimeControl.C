@@ -169,6 +169,8 @@ Foam::pseudotimeControl::pseudotimeControl(fvMesh& mesh, const bool steadyState,
         << "relTol = " << residualTolsRel_
         << nl;
     Info<< endl;
+
+    printInfo_ = mesh.time().controlDict().lookupOrDefault<label>("HiSAPrint", 1);
 }
 
 
@@ -276,7 +278,10 @@ bool Foam::pseudotimeControl::loop()
         {
             if (nCorrOuter_ != 1)
             {
-                Info<< algorithmName_ << ": iteration " << corr_ << endl;
+                if (printInfo_)
+                {
+                    Info<< algorithmName_ << ": iteration " << corr_ << endl;
+                }
 
                 storePrevIterFields();
             }
